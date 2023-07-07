@@ -48,16 +48,22 @@ app.post('/api/shorturl', async (req, res) => {
   // console.log(findDoc)
   if (findDoc && findDoc.length) {
     await shortUrl.find({ fullUrl: req.body.url })
-    .then((doc) => {
-      res.json(doc);
+    .then(([doc]) => {
+      res.json({
+        "original_url": doc.fullUrl,
+        "short_url": parseInt(doc.shortUrl)
+      });
     })
     .catch((err) => {
       return console.error(err);
     });
   } else {
     await shortUrl.create([{ fullUrl: req.body.url }])
-      .then((doc) => {
-        res.json(doc);
+      .then(([doc]) => {
+        res.json({
+          "original_url": doc.fullUrl,
+          "short_url": parseInt(doc.shortUrl)
+        });
       })
       .catch((err) => {
         return console.error(err);
