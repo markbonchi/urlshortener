@@ -8,25 +8,35 @@
       type="image/png"
       href="https://cdn.freecodecamp.org/universal/favicons/favicon-16x16.png"
     />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <link href="/public/style.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <h1>URL Shortener Microservice</h1>
-    <main>
-      <section>
-        <form action="api/shorturl" method="POST">
-          <fieldset>
-            <legend>URL Shortener</legend>
-            <label for="url_input">URL:</label>
-            <input id="url_input" type="text" name="url" placeholder="https://www.freecodecamp.org/" />
-            <input type="submit" value="POST URL" />
-          </fieldset>
-        </form>
-      </section>
-    </main>
+    <div class="container">
+      <h1>URL Shortener Microservice</h1>
+      <form action="api/shorturl" class="d-sm-flex p-2 my-4 form-inline" method="POST">
+        <input id="url_input" class="form-control col mr-2" type="text" name="url" placeholder="https://www.freecodecamp.org/" />
+        <button type="submit" class="btn btn-success mx-2">Shrink</button>
+      </form>
+      <!-- <table class="table table-striped table-responsive">
+        <thead>
+          <tr>
+            <th>Full URL</th>
+            <th>Short Url</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="list-items">
+            List goes here
+          </tr>
+        </tbody>
+      </table> -->
+    </div>
     <footer>
-      <p>By <a href="https://www.freecodecamp.org/">freeCodeCamp</a></p>
+      <p>For <a href="https://www.freecodecamp.org/">freeCodeCamp</a></p>
     </footer>
+    <script src="../module/list.js"></script>
   </body>
 </html>
