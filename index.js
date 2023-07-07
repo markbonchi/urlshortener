@@ -62,7 +62,7 @@ app.post('/api/shorturl', async (req, res) => {
     .then(([doc]) => {
       res.json({
         "original_url": doc.fullUrl,
-        "short_url": parseInt(doc.shortUrl)
+        "short_url": doc.shortUrl
       });
     })
     .catch((err) => {
@@ -73,7 +73,7 @@ app.post('/api/shorturl', async (req, res) => {
       .then(([doc]) => {
         res.json({
           "original_url": doc.fullUrl,
-          "short_url": parseInt(doc.shortUrl)
+          "short_url": doc.shortUrl
         });
       })
       .catch((err) => {
@@ -84,7 +84,7 @@ app.post('/api/shorturl', async (req, res) => {
 
 // redirect using shorturl
 app.get('/api/shorturl/:path', async (req, res) => {
-  await shortUrl.find({ shortUrl: req.params.path })
+  await shortUrl.find({ shortUrl: parseInt(req.params.path) })
     .then(([doc]) => {
       // res.json(doc);
       res.status(301).redirect(doc.fullUrl);
