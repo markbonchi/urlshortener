@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const express = require('express');
 // import express from 'express';
+const validator = require('validator');
 const cors = require('cors');
 const app = express();
 
@@ -44,6 +45,16 @@ app.get('/api/google', (req, res) => {
 
 // ...
 app.post('/api/shorturl', async (req, res) => {
+
+  if (!validator.isURL(req.body.url, {
+      protocols: ['http', 'https', 'ftp'],
+      require_protocol: true,
+  })) {
+    return res.status(404).json({
+      "error": "invalid url"
+    })
+  }
+
   const findDoc = await shortUrl.find({ fullUrl: req.body.url })
   // console.log(findDoc)
   if (findDoc && findDoc.length) {
