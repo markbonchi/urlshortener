@@ -11,10 +11,10 @@ const shortUrlSchema = new Schema({
         // unique: true
     },
     shortUrl: {
-        type: String,
+        type: Number,
         required: true,
         unique: true,
-        default: () => random().toString()
+        default: () => random()
     }
 }) 
 
