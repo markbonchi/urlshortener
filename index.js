@@ -25,7 +25,7 @@ app.use(cors());
 
 app.use('/public', express.static(`${process.cwd()}/public`));
 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
 
@@ -47,10 +47,10 @@ app.get('/api/google', (req, res) => {
 app.post('/api/shorturl', async (req, res) => {
 
   if (!validator.isURL(req.body.url, {
-      protocols: ['http', 'https', 'ftp'],
-      require_protocol: true,
+    protocols: ['http', 'https', 'ftp'],
+    require_protocol: true,
   })) {
-    return res.status(404).json({
+    return res.json({
       "error": "invalid url"
     })
   }
@@ -59,15 +59,15 @@ app.post('/api/shorturl', async (req, res) => {
   // console.log(findDoc)
   if (findDoc && findDoc.length) {
     await shortUrl.find({ fullUrl: req.body.url })
-    .then(([doc]) => {
-      res.json({
-        "original_url": doc.fullUrl,
-        "short_url": doc.shortUrl
+      .then(([doc]) => {
+        res.json({
+          "original_url": doc.fullUrl,
+          "short_url": doc.shortUrl
+        });
+      })
+      .catch((err) => {
+        return console.error(err);
       });
-    })
-    .catch((err) => {
-      return console.error(err);
-    });
   } else {
     await shortUrl.create([{ fullUrl: req.body.url }])
       .then(([doc]) => {
