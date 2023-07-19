@@ -58,12 +58,16 @@ app.post('/api/shorturl', (req, res) => {
         "error": "invalid url"
       })
     }
+
+    if (validator.isIP(value)) {
+      req.url = req.body.url;
+    }
   })
 
-  const findDoc = shortUrl.find({ fullUrl: req.body.url })
+  const findDoc = shortUrl.find({ fullUrl: req.url })
 
   if (findDoc && findDoc.length) {
-    shortUrl.find({ fullUrl: req.body.url })
+    shortUrl.find({ fullUrl: req.url })
       .then(([doc]) => {
         res.json({
           "original_url": doc.fullUrl,
@@ -74,7 +78,7 @@ app.post('/api/shorturl', (req, res) => {
         return console.error(err);
       });
   } else {
-    shortUrl.create([{ fullUrl: req.body.url }])
+    shortUrl.create([{ fullUrl: req.url }])
       .then(([doc]) => {
         res.json({
           "original_url": doc.fullUrl,
