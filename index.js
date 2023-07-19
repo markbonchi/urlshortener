@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 // import express from 'express';
 const validator = require('validator');
+const dns = require('dns');
 const cors = require('cors');
 const app = express();
 
@@ -44,21 +45,25 @@ app.get('/api/google', (req, res) => {
 });
 
 // ...
-app.post('/api/shorturl', async (req, res) => {
+app.post('/api/shorturl', (req, res) => {
 
-  if (!validator.isURL(req.body.url, {
+  let options = {
     protocols: ['http', 'https', 'ftp'],
     require_protocol: true,
-  })) {
-    return res.json({
-      "error": "invalid url"
-    })
   }
+   
+  dns.lookup(req.body.url, (err, value) => {
+    if (err && !value && !validator.isURL(req.body.url, options)) {
+      return res.json({
+        "error": "invalid url"
+      })
+    }
+  })
 
-  const findDoc = await shortUrl.find({ fullUrl: req.body.url })
-  // console.log(findDoc)
+  const findDoc = shortUrl.find({ fullUrl: req.body.url })
+
   if (findDoc && findDoc.length) {
-    await shortUrl.find({ fullUrl: req.body.url })
+    shortUrl.find({ fullUrl: req.body.url })
       .then(([doc]) => {
         res.json({
           "original_url": doc.fullUrl,
@@ -69,7 +74,7 @@ app.post('/api/shorturl', async (req, res) => {
         return console.error(err);
       });
   } else {
-    await shortUrl.create([{ fullUrl: req.body.url }])
+    shortUrl.create([{ fullUrl: req.body.url }])
       .then(([doc]) => {
         res.json({
           "original_url": doc.fullUrl,
@@ -87,7 +92,7 @@ app.get('/api/shorturl/:path', async (req, res) => {
   await shortUrl.find({ shortUrl: parseInt(req.params.path) })
     .then(([doc]) => {
       // res.json(doc);
-      res.status(301).redirect(doc.fullUrl);
+      res.redirect(doc.fullUrl);
     })
     .catch((err) => {
       return console.error(err);
